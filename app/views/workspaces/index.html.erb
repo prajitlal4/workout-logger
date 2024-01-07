@@ -1,0 +1,14 @@
+<h1>Workspaces</h1>
+
+<% if @workspaces.empty? %>
+    <p>You are not a member of any workspaces. Would you like to <a href="#">create a new workspace</a>?</p>
+<% else %>
+  <ul>
+    <% @workspaces.each do |workspace| %>
+      <li><%= link_to workspace.name, workspace_path(workspace) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete } %>
+

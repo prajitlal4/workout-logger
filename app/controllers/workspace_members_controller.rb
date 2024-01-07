@@ -1,0 +1,2 @@
+class WorkspaceMembersController < ApplicationController
+end
