@@ -11,11 +11,8 @@ class CustomDeviseControllers::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     super do |user|
-      Rails.logger.debug("user= #{user.inspect}")
       Current.user = user
       Current.account = user.account
-      Rails.logger.debug("Current.user= #{Current.user.inspect}")
-      Rails.logger.debug("Current.account= #{Current.account.inspect}")
     end
   end
 
