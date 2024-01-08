@@ -8,4 +8,6 @@ class User < ApplicationRecord
   has_many :workspaces, through: :workspace_members
   has_many :workout_routines
   has_many :workout_sessions
+
+  belongs_to :account
 end

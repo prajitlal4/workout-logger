@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_07_131039) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_08_120803) do
+  create_table "accounts", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "exercises", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -27,6 +33,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_07_131039) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "account_id"
+    t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -82,9 +90,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_07_131039) do
     t.integer "created_by_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "account_id"
+    t.index ["account_id"], name: "index_workspaces_on_account_id"
     t.index ["created_by_user_id"], name: "index_workspaces_on_created_by_user_id"
   end
 
+  add_foreign_key "users", "accounts"
   add_foreign_key "workout_exercises", "exercises"
   add_foreign_key "workout_exercises", "workout_sessions"
   add_foreign_key "workout_routines", "users"
@@ -94,5 +105,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_07_131039) do
   add_foreign_key "workout_sessions", "workspaces"
   add_foreign_key "workspace_members", "users"
   add_foreign_key "workspace_members", "workspaces"
+  add_foreign_key "workspaces", "accounts"
   add_foreign_key "workspaces", "users", column: "created_by_user_id"
 end

@@ -1,6 +1,6 @@
 class WorkspacesController < ApplicationController
   def index
-    @workspaces = Workspace.joins(:workspace_members).where(workspace_members: { user_id: current_user.id })
+    @workspaces = Workspace.all
   end
 
   def new
