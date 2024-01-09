@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_08_142237) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_09_115543) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "exercise_types", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -23,6 +37,49 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_142237) do
     t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "routine_exercises", force: :cascade do |t|
+    t.string "name"
+    t.text "note"
+    t.integer "sets"
+    t.integer "routine_id", null: false
+    t.integer "category_id", null: false
+    t.integer "exercise_type_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_routine_exercises_on_category_id"
+    t.index ["exercise_type_id"], name: "index_routine_exercises_on_exercise_type_id"
+    t.index ["routine_id"], name: "index_routine_exercises_on_routine_id"
+  end
+
+  create_table "routines", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "workspace_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workspace_id"], name: "index_routines_on_workspace_id"
+  end
+
+  create_table "session_exercises", force: :cascade do |t|
+    t.integer "routine_exercise_id", null: false
+    t.integer "session_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["routine_exercise_id"], name: "index_session_exercises_on_routine_exercise_id"
+    t.index ["session_id"], name: "index_session_exercises_on_session_id"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.decimal "bodyweight"
+    t.text "notes"
+    t.integer "routine_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["routine_id"], name: "index_sessions_on_routine_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -95,6 +152,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_142237) do
     t.index ["created_by_user_id"], name: "index_workspaces_on_created_by_user_id"
   end
 
+  add_foreign_key "routine_exercises", "categories"
+  add_foreign_key "routine_exercises", "exercise_types"
+  add_foreign_key "routine_exercises", "routines"
+  add_foreign_key "routines", "workspaces"
+  add_foreign_key "session_exercises", "routine_exercises"
+  add_foreign_key "session_exercises", "sessions"
+  add_foreign_key "sessions", "routines"
   add_foreign_key "users", "accounts"
   add_foreign_key "workout_exercises", "exercises"
   add_foreign_key "workout_exercises", "workout_sessions"
