@@ -1,6 +1,7 @@
 class WorkspacesController < ApplicationController
   def index
-    @workspaces = Workspace.joins(:workspace_members).where(workspace_members: { user_id: current_user.id })
+    @owned_workspaces = Workspace.owned_by_current_account
+    @workspaces = Workspace.membership_except_owned(Current.user)
   end
 
   def new
