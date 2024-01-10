@@ -3,3 +3,16 @@
 <p>Name: <%= @workspace.name %></p>
 <p>Description: <%= @workspace.description %></p>
 <p>Created At: <%= @workspace.created_at %></p>
+
+<h2>Routines in this Workspace</h2>
+<% if @routines.any? %>
+  <ul>
+    <% @routines.each do |routine| %>
+      <li><%= link_to routine.name, workspace_routine_path(@workspace, routine) %> - <%= routine.description %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No routines found in this workspace.</p>
+<% end %>
+
+<%= link_to 'Back to Workspaces', workspaces_path %>
