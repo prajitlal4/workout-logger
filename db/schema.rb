@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_09_115543) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_10_091526) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_09_115543) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "workspace_id"
+    t.index ["workspace_id"], name: "index_categories_on_workspace_id"
   end
 
   create_table "exercise_types", force: :cascade do |t|
@@ -33,23 +35,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_09_115543) do
 
   create_table "exercises", force: :cascade do |t|
     t.string "name"
-    t.text "description"
-    t.string "type"
+    t.integer "category_id", null: false
+    t.integer "exercise_type_id", null: false
+    t.integer "workspace_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_exercises_on_category_id"
+    t.index ["exercise_type_id"], name: "index_exercises_on_exercise_type_id"
+    t.index ["workspace_id"], name: "index_exercises_on_workspace_id"
   end
 
   create_table "routine_exercises", force: :cascade do |t|
-    t.string "name"
     t.text "note"
     t.integer "sets"
     t.integer "routine_id", null: false
-    t.integer "category_id", null: false
-    t.integer "exercise_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_routine_exercises_on_category_id"
-    t.index ["exercise_type_id"], name: "index_routine_exercises_on_exercise_type_id"
+    t.integer "exercise_id"
+    t.index ["exercise_id"], name: "index_routine_exercises_on_exercise_id"
     t.index ["routine_id"], name: "index_routine_exercises_on_routine_id"
   end
 
@@ -59,6 +62,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_09_115543) do
     t.integer "workspace_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_routines_on_user_id"
     t.index ["workspace_id"], name: "index_routines_on_workspace_id"
   end
 
@@ -152,9 +157,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_09_115543) do
     t.index ["created_by_user_id"], name: "index_workspaces_on_created_by_user_id"
   end
 
-  add_foreign_key "routine_exercises", "categories"
-  add_foreign_key "routine_exercises", "exercise_types"
+  add_foreign_key "categories", "workspaces"
+  add_foreign_key "exercises", "categories"
+  add_foreign_key "exercises", "exercise_types"
+  add_foreign_key "exercises", "workspaces"
+  add_foreign_key "routine_exercises", "exercises"
   add_foreign_key "routine_exercises", "routines"
+  add_foreign_key "routines", "users"
   add_foreign_key "routines", "workspaces"
   add_foreign_key "session_exercises", "routine_exercises"
   add_foreign_key "session_exercises", "sessions"

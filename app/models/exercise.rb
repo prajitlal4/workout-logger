@@ -1,3 +1,5 @@
 class Exercise < ApplicationRecord
-  has_many :session_exercises
+  belongs_to :category
+  belongs_to :exercise_type
+  belongs_to :workspace
 end
