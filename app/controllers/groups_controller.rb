@@ -4,7 +4,9 @@ class GroupsController < ApplicationController
 
   def index
     @owned_groups = Group.where(created_by_user: current_user)
-    @groups = Group.joins(:group_members).where(created_by_user: current_user)
+    @member_groups = Group.joins(:group_members)
+                      .where(group_members: { user_id: current_user.id })
+                      .where.not(created_by_user: current_user)
   end
 
   def new

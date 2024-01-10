@@ -12,11 +12,11 @@
 <% end %>
 
 <h2>Joined groups</h2>
-<% if @groups.empty? %>
+<% if @member_groups.empty? %>
 <p>You are not a member of any groups.</p>
 <% else %>
   <ul>
-    <% @groups.each do |group| %>
+    <% @member_groups.each do |group| %>
       <li><%= link_to group.name, group_path(group) %></li>
     <% end %>
   </ul>
