@@ -6,7 +6,7 @@ class Current < ActiveSupport::CurrentAttributes
 
   def user=(user)
     super
-    self.account = user.account
+    self.account = user&.account
 
   end
 

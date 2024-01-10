@@ -1,0 +1,12 @@
+<h1><%= @routine.name %></h1>
+<p><%= @routine.description %></p>
+
+<h2>Exercises in this Routine</h2>
+<% if @routine.routine_exercises.any? %>
+  <ul>
+    <% @routine.routine_exercises.each do |routine_exercise| %>
+      <li><%= routine_exercise.exercise.name %></li>
+      <li>Sets: <%= routine_exercise.sets %></li>
+    <% end %>
+  </ul>
+<%end%>
