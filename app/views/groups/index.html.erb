@@ -1,0 +1,26 @@
+<h1 class="text-4xl">Groups</h1>
+
+<h2>Your groups</h2>
+<% if @owned_groups.empty? %>
+    <p>You do not own any groups.</p>
+<% else %>
+  <ul>
+    <% @owned_groups.each do |group| %>
+      <li><%= link_to group.name, group_path(group) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<h2>Joined groups</h2>
+<% if @groups.empty? %>
+<p>You are not a member of any groups.</p>
+<% else %>
+  <ul>
+    <% @groups.each do |group| %>
+      <li><%= link_to group.name, group_path(group) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to 'Create new Group', new_group_path %>
+<%= link_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete } %>

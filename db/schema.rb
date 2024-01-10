@@ -10,20 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_10_091526) do
-  create_table "accounts", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
+ActiveRecord::Schema[7.0].define(version: 2024_01_10_150633) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "workspace_id"
-    t.index ["workspace_id"], name: "index_categories_on_workspace_id"
+    t.integer "group_id"
+    t.index ["group_id"], name: "index_categories_on_group_id"
   end
 
   create_table "exercise_types", force: :cascade do |t|
@@ -37,12 +31,31 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_091526) do
     t.string "name"
     t.integer "category_id", null: false
     t.integer "exercise_type_id", null: false
-    t.integer "workspace_id", null: false
+    t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_exercises_on_category_id"
     t.index ["exercise_type_id"], name: "index_exercises_on_exercise_type_id"
-    t.index ["workspace_id"], name: "index_exercises_on_workspace_id"
+    t.index ["group_id"], name: "index_exercises_on_group_id"
+  end
+
+  create_table "group_members", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "group_id", null: false
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_members_on_group_id"
+    t.index ["user_id"], name: "index_group_members_on_user_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "created_by_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_user_id"], name: "index_groups_on_created_by_user_id"
   end
 
   create_table "routine_exercises", force: :cascade do |t|
@@ -59,12 +72,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_091526) do
   create_table "routines", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.integer "workspace_id", null: false
+    t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["group_id"], name: "index_routines_on_group_id"
     t.index ["user_id"], name: "index_routines_on_user_id"
-    t.index ["workspace_id"], name: "index_routines_on_workspace_id"
   end
 
   create_table "session_exercises", force: :cascade do |t|
@@ -95,8 +108,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_091526) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "account_id"
-    t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -136,48 +147,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_091526) do
     t.index ["workspace_id"], name: "index_workout_sessions_on_workspace_id"
   end
 
-  create_table "workspace_members", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "workspace_id", null: false
-    t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_workspace_members_on_user_id"
-    t.index ["workspace_id"], name: "index_workspace_members_on_workspace_id"
-  end
-
-  create_table "workspaces", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.integer "created_by_user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "account_id"
-    t.index ["account_id"], name: "index_workspaces_on_account_id"
-    t.index ["created_by_user_id"], name: "index_workspaces_on_created_by_user_id"
-  end
-
-  add_foreign_key "categories", "workspaces"
+  add_foreign_key "categories", "groups"
   add_foreign_key "exercises", "categories"
   add_foreign_key "exercises", "exercise_types"
-  add_foreign_key "exercises", "workspaces"
+  add_foreign_key "exercises", "groups"
+  add_foreign_key "group_members", "groups"
+  add_foreign_key "group_members", "users"
+  add_foreign_key "groups", "users", column: "created_by_user_id"
   add_foreign_key "routine_exercises", "exercises"
   add_foreign_key "routine_exercises", "routines"
+  add_foreign_key "routines", "groups"
   add_foreign_key "routines", "users"
-  add_foreign_key "routines", "workspaces"
   add_foreign_key "session_exercises", "routine_exercises"
   add_foreign_key "session_exercises", "sessions"
   add_foreign_key "sessions", "routines"
-  add_foreign_key "users", "accounts"
   add_foreign_key "workout_exercises", "exercises"
   add_foreign_key "workout_exercises", "workout_sessions"
+  add_foreign_key "workout_routines", "groups", column: "workspace_id"
   add_foreign_key "workout_routines", "users"
-  add_foreign_key "workout_routines", "workspaces"
+  add_foreign_key "workout_sessions", "groups", column: "workspace_id"
   add_foreign_key "workout_sessions", "users"
   add_foreign_key "workout_sessions", "workout_routines"
-  add_foreign_key "workout_sessions", "workspaces"
-  add_foreign_key "workspace_members", "users"
-  add_foreign_key "workspace_members", "workspaces"
-  add_foreign_key "workspaces", "accounts"
-  add_foreign_key "workspaces", "users", column: "created_by_user_id"
 end

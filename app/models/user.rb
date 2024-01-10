@@ -4,10 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :workspace_members
-  has_many :workspaces, through: :workspace_members
+  has_many :group_members
+  has_many :groups, through: :group_members
   has_many :routines
   has_many :sessions
-
-  belongs_to :account
 end

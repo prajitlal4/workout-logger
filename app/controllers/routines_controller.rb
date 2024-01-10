@@ -1,8 +1,8 @@
 class RoutinesController < ApplicationController
 
   def index
-    # Fetch routines for the current workspace
-    @routines = Routine.where(workspace_id: current_workspace.id)
+    # Fetch routines for the current group
+    @routines = Routine.where(group_id: current_group.id)
   end
 
   def show
@@ -18,7 +18,7 @@ class RoutinesController < ApplicationController
 
   def create
     @routine = Routine.new(routine_params)
-    @routine.workspace = current_workspace
+    @routine.group = current_group
 
     if @routine.save
       redirect_to @routine, notice: 'Routine was successfully created.'
@@ -40,14 +40,25 @@ class RoutinesController < ApplicationController
     redirect_to routines_url, notice: 'Routine was successfully destroyed.'
   end
 
+  # CUSTOM CONTROLLER ACTIONS
+  #
+  def add_exercise
+    @routine = Routine.find(params[:routine_id])
+    exercise = Exercise.find(params[:exercise_id])
+
+    RoutineExercise.create!(routine: @routine, exercise: exercise)
+
+    redirect_to group_routine_path(@routine.group_id, @routine), notice: 'Exercise added successfully'
+  end
+
   private
 
   def routine_params
     params.require(:routine).permit(:name, :description)
   end
 
-  # Implement current_workspace to retrieve the workspace the current user belongs to
-  def current_workspace
-    @current_workspace ||= Workspace.find_by(id: current_user.current_workspace_id)
+  # Implement current_group to retrieve the group the current user belongs to
+  def current_group
+    @current_group ||= Group.find_by(id: current_user.current_group_id)
   end
 end

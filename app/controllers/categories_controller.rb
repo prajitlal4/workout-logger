@@ -2,8 +2,7 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
 
   def index
-    # Assuming categories are specific to a workspace
-    @categories = Category.where(workspace_id: current_workspace.id)
+    @categories = Category.where(group: [current_group, nil])
   end
 
   def show
@@ -18,7 +17,7 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(category_params)
-    @category.workspace = current_workspace
+    @category.group = current_group
 
     if @category.save
       redirect_to @category, notice: 'Category was successfully created.'
@@ -47,10 +46,10 @@ class CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:name, :description, :workspace_id)
+    params.require(:category).permit(:name, :description, :group_id)
   end
 
-  def current_workspace
-    # Your logic to fetch the current workspace
+  def current_group
+    @current_group ||= Group.find(params[:group_id])
   end
 end

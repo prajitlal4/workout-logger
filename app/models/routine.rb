@@ -1,6 +1,6 @@
 class Routine < ApplicationRecord
   belongs_to :user
-  belongs_to :workspace
+  belongs_to :group
   has_many :sessions
   has_many :routine_exercises
 end

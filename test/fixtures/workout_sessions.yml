@@ -4,10 +4,10 @@ one:
   workout_routine: one
   user: one
   date: 2024-01-07
-  workspace: one
+  group: one
 
 two:
   workout_routine: two
   user: two
   date: 2024-01-07
-  workspace: two
+  group: two

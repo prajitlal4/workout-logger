@@ -1,0 +1,18 @@
+<h1>Group Details</h1>
+
+<p>Name: <%= @group.name %></p>
+<p>Description: <%= @group.description %></p>
+<p>Created At: <%= @group.created_at %></p>
+
+<h2>Routines in this Group</h2>
+<% if @routines.any? %>
+  <ul>
+    <% @routines.each do |routine| %>
+      <li><%= link_to routine.name, group_routine_path(@group, routine) %> - <%= routine.description %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No routines found in this group.</p>
+<% end %>
+
+<%= link_to 'Back to Groups', groups_path %>

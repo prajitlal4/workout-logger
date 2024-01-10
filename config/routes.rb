@@ -4,9 +4,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
-  resources :workspaces do
-    resources :routines
+  resources :groups do
+    resources :routines do
+      post 'add_exercise/:exercise_id', to: 'routines#add_exercise', as: 'add_exercise'
+      resources :exercises
+    end
   end
   resources :categories
-  root "workspaces#index"
+  root "groups#index"
 end

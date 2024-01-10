@@ -4,10 +4,10 @@ one:
   name: MyString
   category: one
   exercise_type: one
-  workspace: one
+  group: one
 
 two:
   name: MyString
   category: two
   exercise_type: two
-  workspace: two
+  group: two

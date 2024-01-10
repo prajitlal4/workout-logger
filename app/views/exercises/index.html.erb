@@ -1,0 +1,10 @@
+<% @categories.each do |category| %>
+  <h3><%= category.name %></h3>
+  <ul>
+    <% category.exercises.each do |exercise| %>
+      <li>
+        <%= link_to exercise.name, group_routine_add_exercise_path(category.group.id, @routine, exercise_id: exercise.id), data: { turbo_method: :post } %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
