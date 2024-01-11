@@ -1,26 +1,52 @@
-<h1 class="text-4xl">Groups</h1>
+<h1 class="text-4xl mb-4">Groups</h1>
 
-<h2>Your groups</h2>
+<div class="flex">
+  <%= button_to 'Create new Group', new_group_path, class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+  <%= button_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete }, class: "rounded-md bg-white px-3.5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+</div>
+
+<h2 class="text-2xl font-semibold mb-2">Your groups</h2>
 <% if @owned_groups.empty? %>
-    <p>You do not own any groups.</p>
+    <p class="text-gray-600">You do not own any groups.</p>
 <% else %>
-  <ul>
+  <ul role="list" class="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
     <% @owned_groups.each do |group| %>
-      <li><%= link_to group.name, group_path(group) %></li>
+      <li class="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
+        <div class="flex min-w-0 gap-x-4">
+          <!-- Add group image if available -->
+
+          <div class="min-w-0 flex-auto">
+            <p class="text-sm font-semibold leading-6 text-gray-900">
+              <%= link_to group.name, group_path(group), class: "relative truncate hover:underline" %>
+            </p>
+            <!-- Add other group details here -->
+          </div>
+        </div>
+        <!-- Additional info or actions for each group -->
+      </li>
     <% end %>
   </ul>
 <% end %>
 
-<h2>Joined groups</h2>
+<h2 class="text-2xl font-semibold mb-2 mt-6">Joined groups</h2>
 <% if @member_groups.empty? %>
-<p>You are not a member of any groups.</p>
+  <p class="text-gray-600">You are not a member of any groups.</p>
 <% else %>
-  <ul>
+  <ul role="list" class="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
     <% @member_groups.each do |group| %>
-      <li><%= link_to group.name, group_path(group) %></li>
+      <li class="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
+        <div class="flex min-w-0 gap-x-4">
+          <!-- Group image or placeholder -->
+          <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="path_to_group_image_or_placeholder" alt="Group Image">
+          <div class="min-w-0 flex-auto">
+            <p class="text-sm font-semibold leading-6 text-gray-900">
+              <%= link_to group.name, group_path(group), class: "relative truncate hover:underline" %>
+            </p>
+            <!-- Additional group details -->
+          </div>
+        </div>
+        <!-- Additional info or actions for each group -->
+      </li>
     <% end %>
   </ul>
 <% end %>
-
-<%= link_to 'Create new Group', new_group_path %>
-<%= link_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete } %>
