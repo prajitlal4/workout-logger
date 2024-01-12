@@ -1,50 +1,33 @@
 class RoutineExercisesController < ApplicationController
-  before_action :set_routine_exercise, only: [:show, :edit, :update, :destroy]
-
-  def index
-    @routine_exercises = RoutineExercise.where(routine_id: params[:routine_id])
-  end
-
-  def show
-  end
-
-  def new
-    @routine_exercise = RoutineExercise.new
-  end
-
-  def edit
-  end
-
-  def create
-    @routine_exercise = RoutineExercise.new(routine_exercise_params)
-
-    if @routine_exercise.save
-      redirect_to @routine_exercise, notice: 'Routine exercise was successfully created.'
-    else
-      render :new
-    end
-  end
+  before_action :set_routine
+  before_action :set_routine_exercise, only: [:update, :destroy]
 
   def update
     if @routine_exercise.update(routine_exercise_params)
-      redirect_to @routine_exercise, notice: 'Routine exercise was successfully updated.'
+      # Redirect or render as per your requirements
+      redirect_to @routine, notice: 'Exercise was successfully updated.'
     else
-      render :edit
+      # Handle error scenario
+      redirect_to @routine, alert: 'Unable to update exercise.'
     end
   end
 
   def destroy
     @routine_exercise.destroy
-    redirect_to routine_exercises_url, notice: 'Routine exercise was successfully destroyed.'
+    redirect_to group_routine_path(@routine.group_id, @routine), notice: 'Exercise was successfully removed.'
   end
 
   private
 
+  def set_routine
+    @routine = Routine.find(params[:routine_id])
+  end
+
   def set_routine_exercise
-    @routine_exercise = RoutineExercise.find(params[:id])
+    @routine_exercise = @routine.routine_exercises.find(params[:id])
   end
 
   def routine_exercise_params
-    params.require(:routine_exercise).permit(:name, :note, :sets, :category_id, :exercise_type_id, :routine_id)
+    params.require(:routine_exercise).permit(:sets) # Adjust the permitted params as needed
   end
 end

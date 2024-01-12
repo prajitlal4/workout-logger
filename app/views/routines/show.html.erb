@@ -1,23 +1,23 @@
 <h1><%= @routine.name %></h1>
 <p><%= @routine.description %></p>
 
-<%= form_with(url: update_exercises_group_routine_path(@routine.id), method: :patch) do |form| %>
+<%= form_with(model: @routine, url: update_exercises_group_routine_path(@routine.group, @routine), method: :patch) do |form| %>
   <h2>Exercises in this Routine</h2>
-  <% if @routine.routine_exercises.any? %>
-    <ul>
-      <% @routine.routine_exercises.each do |routine_exercise| %>
-        <li>
-          <%= form.fields_for 'routine_exercises[]', routine_exercise do |re_form| %>
-            <%= re_form.hidden_field :id %>
-            <%= routine_exercise.exercise.name %>
-            <%= re_form.number_field :sets, id: "routine_exercises_#{routine_exercise.id}_sets" %>
-          <% end %>
-        </li>
+  <% @routine.routine_exercises.each do |routine_exercise| %>
+    <div>
+      <%= routine_exercise.exercise.name %>
+      <%= form.fields_for 'routine_exercises[]', routine_exercise do |re_form| %>
+        <%= re_form.hidden_field :id %>
+        <%= re_form.number_field :sets %>
       <% end %>
-    </ul>
+      <%= link_to 'Remove', group_routine_routine_exercise_path(@routine.group, @routine, routine_exercise),
+                  method: :delete,
+                  data: { turbo_method: :delete, confirm: 'Are you sure?' },
+                  class: 'btn btn-danger' %>
+    </div>
   <% end %>
 
   <%= form.submit "Update All Exercises" %>
 <% end %>
 
-<%= link_to 'Add Exercises', new_group_routine_exercise_path(@routine.group, @routine), class: "btn btn-primary" %>
+<%= link_to 'Add Exercises', group_routine_exercises_path(@routine.group, @routine), class: "btn btn-primary" %>
