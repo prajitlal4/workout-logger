@@ -1,14 +1,23 @@
 <h1><%= @routine.name %></h1>
 <p><%= @routine.description %></p>
 
-<h2>Exercises in this Routine</h2>
-<% if @routine.routine_exercises.any? %>
-  <ul>
-    <% @routine.routine_exercises.each do |routine_exercise| %>
-      <li><%= routine_exercise.exercise.name %></li>
-      <li>Sets: <%= routine_exercise.sets %></li>
-    <% end %>
-  </ul>
-<%end%>
+<%= form_with(url: update_exercises_group_routine_path(@routine.id), method: :patch) do |form| %>
+  <h2>Exercises in this Routine</h2>
+  <% if @routine.routine_exercises.any? %>
+    <ul>
+      <% @routine.routine_exercises.each do |routine_exercise| %>
+        <li>
+          <%= form.fields_for 'routine_exercises[]', routine_exercise do |re_form| %>
+            <%= re_form.hidden_field :id %>
+            <%= routine_exercise.exercise.name %>
+            <%= re_form.number_field :sets, id: "routine_exercises_#{routine_exercise.id}_sets" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 
-<%= link_to 'Add Exercise', group_routine_exercises_path(@routine.group, @routine), class: 'btn btn-primary' %>
+  <%= form.submit "Update All Exercises" %>
+<% end %>
+
+<%= link_to 'Add Exercises', new_group_routine_exercise_path(@routine.group, @routine), class: "btn btn-primary" %>

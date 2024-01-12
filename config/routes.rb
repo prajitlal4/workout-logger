@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     resources :routines do
       post 'add_exercise/:exercise_id', to: 'routines#add_exercise', as: 'add_exercise'
       resources :exercises
+      resources :routine_exercises
+      patch 'update_exercises', on: :member
     end
   end
   resources :categories
