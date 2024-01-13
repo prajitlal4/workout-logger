@@ -15,4 +15,15 @@
   <p>No routines found in this group.</p>
 <% end %>
 
+<h2>Sessions logged</h2>
+<% if @sessions.any? %>
+  <ul>
+    <% @sessions.each do |session| %>
+      <li><%= session.user.email %> - <%= link_to session.routine.name, session_path(session) %> - <%= session.start_time %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No sessions found in this group.</p>
+<% end %>
+
 <%= link_to 'Back to Groups', groups_path %>

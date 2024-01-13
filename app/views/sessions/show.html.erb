@@ -1,5 +1,6 @@
 <h1>Session for <%= @session.routine.name %></h1>
 <p>Started at: <%= @session.start_time %></p>
+<p>End time: <%= @session.end_time %></p>
 
 <%= form_with(model: @session, url: session_path(@session), method: :patch) do |form| %>
   <% @session.session_exercises.each do |session_exercise| %>
@@ -7,9 +8,9 @@
     <% session_exercise.set_details.each_with_index do |set_detail, index| %>
       <div>
         <label>Set <%= index + 1 %>:</label>
-        <%= number_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][reps]", set_detail['reps'] %>
-        <%= number_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][weight]", set_detail['weight'] %>
-        <%= text_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][note]", set_detail['note'] %>
+        <p>Reps: <%= number_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][reps]", set_detail['reps'] %></p>
+        <p>Weight: <%= number_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][weight]", set_detail['weight'] %></p>
+        <p>Notes: <%= text_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][note]", set_detail['note'] %></p>
       </div>
     <% end %>
   <% end %>
