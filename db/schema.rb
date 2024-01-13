@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_13_093545) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_13_103804) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -170,7 +170,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_13_093545) do
   add_foreign_key "routines", "groups"
   add_foreign_key "routines", "users"
   add_foreign_key "session_exercises", "exercises"
-  add_foreign_key "session_exercises", "routine_exercises"
   add_foreign_key "session_exercises", "sessions"
   add_foreign_key "sessions", "groups"
   add_foreign_key "sessions", "routines"
