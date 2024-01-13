@@ -53,15 +53,11 @@ class RoutinesController < ApplicationController
 
   def update_exercises
     @routine = Routine.find(params[:id])
-    ActiveRecord::Base.transaction do
-      routine_exercises_params.each do |exercise_params|
-        routine_exercise = @routine.routine_exercises.find(exercise_params[:id])
-        routine_exercise.update!(sets: exercise_params[:sets])
-      end
+
+    routine_exercises_params[:routine_exercises].each do |id, exercise_params|
+      routine_exercise = @routine.routine_exercises.find(id)
+      routine_exercise.update(sets: exercise_params[:sets])
     end
-    redirect_to group_routine_path(@routine.group_id, @routine), notice: 'All exercises were successfully updated.'
-  rescue ActiveRecord::RecordInvalid
-    render :show, alert: 'There was an error updating the exercises.'
   end
 
   private
@@ -71,9 +67,7 @@ class RoutinesController < ApplicationController
   end
 
   def routine_exercises_params
-    params.require(:routine_exercises).permit!.to_h.map do |_key, exercise_params|
-      exercise_params.slice(:id, :sets) # This filters only the id and sets keys
-    end
+    params.require(:routine).permit(routine_exercises: [:id, :sets])
   end
 
   # Implement current_group to retrieve the group the current user belongs to

@@ -15,16 +15,6 @@ class SessionExercisesController < ApplicationController
   def edit
   end
 
-  def create
-    @session_exercise = SessionExercise.new(session_exercise_params)
-
-    if @session_exercise.save
-      redirect_to @session_exercise, notice: 'Session exercise was successfully created.'
-    else
-      render :new
-    end
-  end
-
   def update
     if @session_exercise.update(session_exercise_params)
       redirect_to @session_exercise, notice: 'Session exercise was successfully updated.'
@@ -46,6 +36,5 @@ class SessionExercisesController < ApplicationController
 
   def session_exercise_params
     params.require(:session_exercise).permit(:routine_exercise_id, :session_id)
-    # Add fields for reps, weight, etc., for each set
   end
 end

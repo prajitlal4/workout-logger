@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_10_150633) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_13_093545) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -85,6 +85,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_150633) do
     t.integer "session_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "exercise_id", null: false
+    t.integer "sets"
+    t.integer "reps"
+    t.decimal "weight"
+    t.text "note"
+    t.json "set_details"
+    t.index ["exercise_id"], name: "index_session_exercises_on_exercise_id"
     t.index ["routine_exercise_id"], name: "index_session_exercises_on_routine_exercise_id"
     t.index ["session_id"], name: "index_session_exercises_on_session_id"
   end
@@ -97,7 +104,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_150633) do
     t.integer "routine_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.integer "group_id", null: false
+    t.index ["group_id"], name: "index_sessions_on_group_id"
     t.index ["routine_id"], name: "index_sessions_on_routine_id"
+    t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -158,9 +169,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_150633) do
   add_foreign_key "routine_exercises", "routines"
   add_foreign_key "routines", "groups"
   add_foreign_key "routines", "users"
+  add_foreign_key "session_exercises", "exercises"
   add_foreign_key "session_exercises", "routine_exercises"
   add_foreign_key "session_exercises", "sessions"
+  add_foreign_key "sessions", "groups"
   add_foreign_key "sessions", "routines"
+  add_foreign_key "sessions", "users"
   add_foreign_key "workout_exercises", "exercises"
   add_foreign_key "workout_exercises", "workout_sessions"
   add_foreign_key "workout_routines", "groups", column: "workspace_id"
