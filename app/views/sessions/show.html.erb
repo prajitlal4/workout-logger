@@ -6,12 +6,17 @@
   <% @session.session_exercises.each do |session_exercise| %>
     <h3><%= session_exercise.routine_exercise.exercise.name %></h3>
     <% session_exercise.set_details.each_with_index do |set_detail, index| %>
-      <div>
-        <label>Set <%= index + 1 %>:</label>
-        <p>Reps: <%= number_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][reps]", set_detail['reps'] %></p>
-        <p>Weight: <%= number_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][weight]", set_detail['weight'] %></p>
-        <p>Notes: <%= text_field_tag "session_exercises[#{session_exercise.id}][set_details][#{index}][note]", set_detail['note'] %></p>
-      </div>
+      <% if @session.ended? %>
+        <!-- Use the current set detail values -->
+        <%= number_field_tag "reps", set_detail['reps'] %>
+        <%= number_field_tag "weight", set_detail['weight'] %>
+        <%= text_field_tag "note", set_detail['note'] %>
+      <% else %>
+        <!-- Use the last recorded value or 0 -->
+        <%= number_field_tag "reps", last_value_for_exercise(session_exercise.routine_exercise.exercise, :reps) %>
+        <%= number_field_tag "weight", last_value_for_exercise(session_exercise.routine_exercise.exercise, :weight) %>
+        <%= text_field_tag "note", last_value_for_exercise(session_exercise.routine_exercise.exercise, :note) %>
+      <% end %>
     <% end %>
   <% end %>
   <%= form.submit "Update Session" %>
