@@ -41,7 +41,7 @@ class WorkoutSessionsController < ApplicationController
   end
 
   def update
-    if @workout_session.update(session_params)
+    if @workout_session.update(workout_session_params)
       redirect_to group_routine_path(@workout_session.group_id, @workout_session.routine_id), notice: 'WorkoutSession was successfully updated.'
     else
       render :edit
@@ -87,13 +87,14 @@ class WorkoutSessionsController < ApplicationController
     @workout_session = WorkoutSession.find(params[:id])
   end
 
-  def session_params
-    params.require(:workout_session).permit(:start_time, :end_time, :bodyweight, :notes, :routine_id)
-  end
-
-  def session_exercises_params
-    params.require(:session_exercises).map do |_, exercise_params|
-      exercise_params.permit(:id, :sets, :reps, :weight, :set_details)
-    end
+  def workout_session_params
+    params.require(:workout_session).permit(
+      :start_time,
+      :end_time,
+      :bodyweight,
+      :notes,
+      :routine_id,
+      session_exercises_attributes: [:id, :sets, :reps, :weight, :note, :routine_exercise_id, set_details: []]
+    )
   end
 end
