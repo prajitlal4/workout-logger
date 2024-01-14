@@ -1,0 +1,12 @@
+<%= form_with(model: @routine, url: group_routines_path(@group), method: :post) do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+    <%= form.label :description %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Create Group" %>
+  </div>
+<% end %>

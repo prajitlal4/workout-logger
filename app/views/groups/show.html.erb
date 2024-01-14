@@ -14,6 +14,7 @@
 <% else %>
   <p>No routines found in this group.</p>
 <% end %>
+<%= link_to "Add Routine", new_group_routine_path(@group) %>
 
 <h2>Sessions logged</h2>
 <% if @workout_sessions.any? %>

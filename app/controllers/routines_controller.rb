@@ -11,6 +11,7 @@ class RoutinesController < ApplicationController
 
   def new
     @routine = Routine.new
+    @group = Group.find(params[:group_id])
   end
 
   def edit
@@ -18,10 +19,11 @@ class RoutinesController < ApplicationController
 
   def create
     @routine = Routine.new(routine_params)
-    @routine.group = current_group
+    @routine.group = Group.find(params[:group_id])
+    @routine.user = current_user
 
     if @routine.save
-      redirect_to @routine, notice: 'Routine was successfully created.'
+      redirect_to group_path(@routine.group), notice: 'Routine was successfully created.'
     else
       render :new
     end
@@ -70,8 +72,4 @@ class RoutinesController < ApplicationController
     params.require(:routine).permit(routine_exercises: [:id, :sets])
   end
 
-  # Implement current_group to retrieve the group the current user belongs to
-  def current_group
-    @current_group ||= Group.find_by(id: current_user.current_group_id)
-  end
 end
