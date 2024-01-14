@@ -45,6 +45,9 @@ gem "bootsnap", require: false
 # Devise for user authentication
 gem 'devise'
 
+# Devise Invitable for inviting new users to join
+gem 'devise_invitable'
+
 
 # Use Sass to process CSS
 # gem "sassc-rails"

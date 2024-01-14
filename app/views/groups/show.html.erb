@@ -26,4 +26,12 @@
   <p>No workout_sessions found in this group.</p>
 <% end %>
 
+<h2>Invite User to Group</h2>
+<%= form_with url: group_invite_to_group_path(@group), method: :post do |f| %>
+  <%= f.label :email, "User Email" %>
+  <%= f.email_field :email, required: true %>
+  <%= f.hidden_field :group_id, value: @group.id %>
+  <%= f.submit "Send Invitation", class: 'btn btn-success' %>
+<% end %>
+
 <%= link_to 'Back to Groups', groups_path %>
