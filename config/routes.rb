@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   resources :groups do
+    post 'invite', to: 'groups#invite_to_group', as: :invite_to_group
     resources :routines do
       post 'add_exercise/:exercise_id', to: 'routines#add_exercise', as: 'add_exercise'
       resources :exercises

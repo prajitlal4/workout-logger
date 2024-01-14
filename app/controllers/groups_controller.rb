@@ -33,6 +33,15 @@ class GroupsController < ApplicationController
     @workout_sessions = @group.workout_sessions
   end
 
+  # CUSTOM CONTROLLER ACTIONS
+  def invite_to_group
+    user_email = params[:email]
+    group_id = params[:group_id]
+
+    User.invite!({email: user_email, group_id: group_id}, current_user)
+    redirect_to group_path(group_id), notice: "Invitation sent to #{user_email}"
+  end
+
   private
 
   def group_params
