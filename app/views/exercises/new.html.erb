@@ -1,0 +1,33 @@
+<h1>Create your own exercise</h1>
+
+<%= form_with model: @exercise, url: group_routine_exercises_path(@group, @routine), data: { turbo_method: :post } do |form| %>
+  <% if @exercise.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@exercise.errors.count, "error") %> prohibited this exercise from being saved:</h2>
+      <ul>
+        <% @exercise.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :category_id %>
+    <%= form.collection_select :category_id, @categories, :id, :name, include_blank: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :exercise_type_id %>
+    <%= form.collection_select :exercise_type_id, @exercise_types, :id, :name, include_blank: true %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

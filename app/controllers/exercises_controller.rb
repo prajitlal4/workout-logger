@@ -5,12 +5,22 @@ class ExercisesController < ApplicationController
     @categories = Category.includes(:exercises).where(group_id: current_group.id)
   end
 
+  def new
+    @routine = Routine.find(params[:routine_id])
+    @group = Group.find(params[:group_id])
+    @exercise = Exercise.new
+    @categories = Category.all
+    @exercise_types = ExerciseType.all
+  end
+
   def create
     @exercise = Exercise.new(exercise_params)
-    @exercise.group = current_group
+    @group = Group.find(params[:group_id])
+    @routine = Routine.find(params[:routine_id])
+    @exercise.group = @group
 
     if @exercise.save
-      redirect_to @excerise, notice: 'Exercise was successfully added.'
+      redirect_to group_routine_exercises_path(@group, @routine), notice: 'Exercise was successfully added.'
     else
       render :new
     end
@@ -19,7 +29,7 @@ class ExercisesController < ApplicationController
   private
 
   def exercise_params
-    params.require(:exercise).permit(:name, :category_id, :exercise_type_id, :group_id)
+    params.require(:exercise).permit(:name, :category_id, :exercise_type_id, :group_id, :routine_id)
   end
 
   def current_group
