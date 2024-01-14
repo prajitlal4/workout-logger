@@ -7,5 +7,5 @@ class User < ApplicationRecord
   has_many :group_members
   has_many :groups, through: :group_members
   has_many :routines
-  has_many :sessions
+  has_many :workout_sessions
 end

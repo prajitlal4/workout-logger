@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { sessions: "custom_devise_controllers/sessions" }
+  devise_for :users
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -13,7 +14,7 @@ Rails.application.routes.draw do
     end
   end
   resources :categories
-  resources :sessions, only: [:create, :show, :update] do
+  resources :workout_sessions, only: [:create, :show, :update] do
     patch :update_exercises, on: :member
     resources :session_exercises
     member do

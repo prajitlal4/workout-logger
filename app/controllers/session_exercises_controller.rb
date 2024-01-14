@@ -2,7 +2,7 @@ class SessionExercisesController < ApplicationController
   before_action :set_session_exercise, only: [:show, :edit, :update, :destroy]
 
   def index
-    @session_exercises = SessionExercise.where(session_id: params[:session_id])
+    @session_exercises = SessionExercise.where(workout_session_id: params[:workout_session_id])
   end
 
   def show
@@ -17,7 +17,7 @@ class SessionExercisesController < ApplicationController
 
   def update
     if @session_exercise.update(session_exercise_params)
-      redirect_to @session_exercise, notice: 'Session exercise was successfully updated.'
+      redirect_to @session_exercise, notice: 'WorkoutSession exercise was successfully updated.'
     else
       render :edit
     end
@@ -25,7 +25,7 @@ class SessionExercisesController < ApplicationController
 
   def destroy
     @session_exercise.destroy
-    redirect_to session_exercises_url, notice: 'Session exercise was successfully destroyed.'
+    redirect_to session_exercises_url, notice: 'WorkoutSession exercise was successfully destroyed.'
   end
 
   private
@@ -35,6 +35,6 @@ class SessionExercisesController < ApplicationController
   end
 
   def session_exercise_params
-    params.require(:session_exercise).permit(:routine_exercise_id, :session_id)
+    params.require(:session_exercise).permit(:routine_exercise_id, :workout_session_id)
   end
 end

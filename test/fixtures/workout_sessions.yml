@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  workout_routine: one
-  user: one
-  date: 2024-01-07
-  group: one
+  start_time: 2024-01-13 22:47:15
+  end_time: 2024-01-13 22:47:15
+  bodyweight: 9.99
+  notes: MyText
 
 two:
-  workout_routine: two
-  user: two
-  date: 2024-01-07
-  group: two
+  start_time: 2024-01-13 22:47:15
+  end_time: 2024-01-13 22:47:15
+  bodyweight: 9.99
+  notes: MyText

@@ -30,7 +30,7 @@ class GroupsController < ApplicationController
   def show
     @group = Group.find(params[:id])
     @routines = @group.routines
-    @sessions = @group.sessions
+    @workout_sessions = @group.workout_sessions
   end
 
   private

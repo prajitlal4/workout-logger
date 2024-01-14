@@ -16,14 +16,14 @@
 <% end %>
 
 <h2>Sessions logged</h2>
-<% if @sessions.any? %>
+<% if @workout_sessions.any? %>
   <ul>
-    <% @sessions.each do |session| %>
-      <li><%= session.user.email %> - <%= link_to session.routine.name, session_path(session) %> - <%= session.start_time %></li>
+    <% @workout_sessions.each do |workout_session| %>
+      <li><%= workout_session.user.email %> - <%= link_to workout_session.routine.name, workout_session_path(workout_session) %> - <%= workout_session.start_time %></li>
     <% end %>
   </ul>
 <% else %>
-  <p>No sessions found in this group.</p>
+  <p>No workout_sessions found in this group.</p>
 <% end %>
 
 <%= link_to 'Back to Groups', groups_path %>

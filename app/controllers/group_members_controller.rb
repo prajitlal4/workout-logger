@@ -1,2 +1,2 @@
-class GroupMemberController < ApplicationController
+class GroupMembersController < ApplicationController
 end
