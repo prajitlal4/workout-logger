@@ -6,4 +6,6 @@ class Group < ApplicationRecord
   has_many :routines
   has_many :workout_sessions
 
+  has_many :invitation_group_associations
+
 end

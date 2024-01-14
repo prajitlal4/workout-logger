@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_14_091404) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_14_111018) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -56,6 +56,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_14_091404) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_user_id"], name: "index_groups_on_created_by_user_id"
+  end
+
+  create_table "invitation_group_associations", force: :cascade do |t|
+    t.string "email"
+    t.integer "group_id", null: false
+    t.string "invitation_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_invitation_group_associations_on_group_id"
   end
 
   create_table "routine_exercises", force: :cascade do |t|
@@ -179,6 +188,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_14_091404) do
   add_foreign_key "group_members", "groups"
   add_foreign_key "group_members", "users"
   add_foreign_key "groups", "users", column: "created_by_user_id"
+  add_foreign_key "invitation_group_associations", "groups"
   add_foreign_key "routine_exercises", "exercises"
   add_foreign_key "routine_exercises", "routines"
   add_foreign_key "routines", "groups"
