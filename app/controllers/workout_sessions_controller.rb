@@ -16,12 +16,12 @@ class WorkoutSessionsController < ApplicationController
 
       unless session_exercise
         # Fetch last values or default values
-        last_values = last_values_for_exercise(routine_exercise.exercise)
+        last_values = last_values_for_exercise(routine_exercise.exercise, current_user, routine_exercise.sets)
 
         # Build a new session exercise with the last or default values
         @workout_session.session_exercises.build(
           exercise_id: routine_exercise.exercise_id,
-          set_details: [last_values]
+          set_details: Array.new(routine_exercise.sets) { last_values }
         )
       end
     end
@@ -39,22 +39,18 @@ class WorkoutSessionsController < ApplicationController
     @group = @routine.group
     @workout_session = WorkoutSession.new(routine: @routine, start_time: Time.current, user: current_user, group: @group)
     @workout_session.routine.routine_exercises.each do |routine_exercise|
-      # Get the number of sets for this routine exercise
-      num_of_sets = routine_exercise.sets
+      last_values = last_values_for_exercise(routine_exercise.exercise, current_user, routine_exercise.sets)
 
-      # Get the last or default set details for the correct number of sets
-      set_details = last_values_for_exercise(routine_exercise.exercise, current_user, num_of_sets)
-
-      @workout_session.session_exercises.build(
-        routine_exercise: routine_exercise,
+      session_exercise = @workout_session.session_exercises.build(
         exercise_id: routine_exercise.exercise_id,
-        set_details: set_details
+        set_details: last_values,
+        routine_exercise_id: routine_exercise.id
       )
+
     end
     if @workout_session.save
       redirect_to workout_session_path(@workout_session), notice: 'WorkoutSession started successfully.'
     else
-      Rails.logger.debug @workout_session.errors.full_messages.to_sentence
       redirect_to group_routine_path(@routine.group_id, @routine), alert: 'Error starting workout_session.'
     end
   end
