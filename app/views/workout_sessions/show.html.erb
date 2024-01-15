@@ -3,25 +3,24 @@
 <p>End time: <%= @workout_session.end_time %></p>
 
 <%= form_with(model: @workout_session, url: workout_session_path(@workout_session), method: :patch) do |form| %>
-  <%= form.fields_for :session_exercises do |session_exercise| %>
-    <% session_exercise.object.set_details.each_with_index do |set_detail, index| %>
-      <h3><%= session_exercise.object.routine_exercise.exercise.name %></h3>
-      <p>Set <%= index + 1 %></p>
-    <% if @workout_session.ended? %>
-      <!-- Use the current set detail values -->
-      <p>Reps: <%= number_field_tag "reps", set_detail['reps'] %></p>
-      <p>Weight: <%= number_field_tag "weight", set_detail['weight'] %></p>
-      <p>Note: <%= text_field_tag "note", set_detail['note'] %></p>
-    <% else %>
-      <!-- Use the last recorded value or 0 -->
-      <p>Reps: <%= number_field_tag "reps", last_value_for_exercise(session_exercise.object.routine_exercise.exercise, :reps) %></p>
-      <p>Weight: <%= number_field_tag "weight", last_value_for_exercise(session_exercise.object.routine_exercise.exercise, :weight) %></p>
-      <p>Note: <%= text_field_tag "note", last_value_for_exercise(session_exercise.object.routine_exercise.exercise, :note) %></p>
-    <% end %>
+  <%= form.fields_for :session_exercises do |session_exercise_fields| %>
+    <% session_exercise_fields.object.set_details.each_with_index do |set_detail, index| %>
+      <div>
+        <%= session_exercise_fields.label :reps, "Reps for Set #{index + 1}" %>
+        <%= session_exercise_fields.number_field :reps, name: "workout_session[session_exercises_attributes][#{session_exercise_fields.index}][set_details][][reps]", value: set_detail[:reps] %>
+
+        <%= session_exercise_fields.label :weight, "Weight for Set #{index + 1}" %>
+        <%= session_exercise_fields.number_field :weight, name: "workout_session[session_exercises_attributes][#{session_exercise_fields.index}][set_details][][weight]", value: set_detail[:weight] %>
+
+        <%= session_exercise_fields.label :note, "Note for Set #{index + 1}" %>
+        <%= session_exercise_fields.text_field :note, name: "workout_session[session_exercises_attributes][#{session_exercise_fields.index}][set_details][][note]", value: set_detail[:note] %>
+      </div>
     <% end %>
   <% end %>
   <%= form.submit "Update WorkoutSession" %>
 <% end %>
+
+
 <!-- Add a button or link to end the workout_session -->
 <% if !@workout_session.ended?%>
   <%= link_to 'End WorkoutSession', end_session_workout_session_path(@workout_session), data: { turbo_method: :patch }, class: "btn btn-primary" %>
