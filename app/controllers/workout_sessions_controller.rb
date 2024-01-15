@@ -24,7 +24,7 @@ class WorkoutSessionsController < ApplicationController
     if @workout_session.save
       @routine.routine_exercises.each do |routine_exercise|
         initial_set_details = Array.new(routine_exercise.sets) { { reps: nil, weight: nil, note: "" } }
-        session_exercise = @workout_session.session_exercises.create(
+        session_exercise = @workout_session.session_exercises.create!(
           routine_exercise: routine_exercise,
           exercise: routine_exercise.exercise,
           set_details: initial_set_details
