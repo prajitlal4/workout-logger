@@ -1,8 +1,7 @@
 class RoutinesController < ApplicationController
 
   def index
-    # Fetch routines for the current group
-    @routines = Routine.where(group_id: current_group.id)
+    @routines = Routine.where(group_id: params[:group_id])
   end
 
   def show

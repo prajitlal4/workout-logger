@@ -1,25 +1,36 @@
-<h1><%= @routine.name %></h1>
-<p><%= @routine.description %></p>
+<div class="flex flex-col mb-4 md:mb-2 justify-between md:flex-row">
+  <div>
+    <h1 class="text-4xl mb-1"><%= @routine.name %></h1>
+    <h2 class="text-xl mb-2 text-gray-600 "><%= @routine.description %></h2>
+  </div>
+  <%= link_to 'Back to Routines', group_path(@routine.group), class: "self-start md:self-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+</div>
 
-<%= form_with(model: @routine, url: update_exercises_group_routine_path(@routine.group, @routine), method: :patch) do |form| %>
-  <h2>Exercises in this Routine</h2>
-  <% @routine.routine_exercises.each do |routine_exercise| %>
+<%= form_with(model: @routine, url: update_exercises_group_routine_path(@routine.group, @routine), method: :patch, local: true) do |form| %>
+  <div class="mt-8 flex flex-col mb-6 md:mb-10 justify-between md:flex-row">
+    <h2 class="text-xl mb-2 ">Exercises</h2>
     <div>
-      <%= routine_exercise.exercise.name %>
-      <%= form.fields_for 'routine_exercises[]', routine_exercise do |re_form| %>
-        <%= re_form.hidden_field :id %>
-        <%= re_form.number_field :sets %>
-      <% end %>
-      <%= link_to 'Remove', group_routine_routine_exercise_path(@routine.group, @routine, routine_exercise),
-                  method: :delete,
-                  data: { turbo_method: :delete, confirm: 'Are you sure?' },
-                  class: 'btn btn-danger' %>
+      <%= link_to 'Start Workout Session', workout_sessions_path(routine_id: @routine.id), data: { turbo_method: :post }, class: "bg-green-200 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-100 self-start md:self-center" %>
+      <%= link_to 'Add Exercise', group_routine_exercises_path(@routine.group, @routine), class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 self-start md:self-center" %>
     </div>
-  <% end %>
-
-  <%= form.submit "Update All Exercises" %>
+  </div>
+  <div class="flex flex-col space-y-2">
+    <% @routine.routine_exercises.each do |routine_exercise| %>
+      <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 bg-white shadow-sm ring-1 ring-gray-300 sm:rounded-lg p-4">
+        <div class="flex-grow">
+          <%= routine_exercise.exercise.name %>
+        </div>
+        <%= form.fields_for 'routine_exercises[]', routine_exercise do |re_form| %>
+          <%= re_form.hidden_field :id %>
+          <div class="flex-grow">
+            <%= re_form.number_field :sets, class: "w-full sm:w-auto rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" %>
+          </div>
+          <%= link_to 'Remove', group_routine_routine_exercise_path(@routine.group, @routine, routine_exercise), method: :delete, data: { turbo_method: :delete, confirm: 'Are you sure?' }, class: "text-red-600 hover:text-red-700" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-4">
+    <%= form.submit "Update All Exercises", class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 self-start md:self-center" %>
+  </div>
 <% end %>
-
-<%= link_to 'Add Exercises', group_routine_exercises_path(@routine.group, @routine), class: "btn btn-primary" %>
-<%= link_to 'Start WorkoutSession', workout_sessions_path(routine_id: @routine.id), data: { turbo_method: :post }, class: "btn btn-primary" %>
-
