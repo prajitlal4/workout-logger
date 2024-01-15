@@ -8,6 +8,23 @@ class WorkoutSessionsController < ApplicationController
 
   def show
     @workout_session = WorkoutSession.includes(:session_exercises).find(params[:id])
+
+    # Assuming each routine exercise is part of the workout session
+    @workout_session.routine.routine_exercises.each do |routine_exercise|
+      # Check if a session exercise for this routine exercise already exists in this workout session
+      session_exercise = @workout_session.session_exercises.find_by(exercise_id: routine_exercise.exercise_id)
+
+      unless session_exercise
+        # Fetch last values or default values
+        last_values = last_values_for_exercise(routine_exercise.exercise)
+
+        # Build a new session exercise with the last or default values
+        @workout_session.session_exercises.build(
+          exercise_id: routine_exercise.exercise_id,
+          set_details: [last_values]
+        )
+      end
+    end
   end
 
   def new
@@ -21,26 +38,29 @@ class WorkoutSessionsController < ApplicationController
     @routine = Routine.find(params[:routine_id])
     @group = @routine.group
     @workout_session = WorkoutSession.new(routine: @routine, start_time: Time.current, user: current_user, group: @group)
+    @workout_session.routine.routine_exercises.each do |routine_exercise|
+      # Fetch the last session exercise for this routine exercise
+      last_session_exercise = SessionExercise.where(exercise_id: routine_exercise.exercise_id).order(created_at: :desc).first
 
+      # Determine the number of sets for this routine exercise
+      num_of_sets = routine_exercise.sets
+
+      set_details_array = if last_session_exercise && last_session_exercise.set_details.present?
+                            # Take the last 'num_of_sets' from the last session exercise, or fill in with default values
+                            last_set_details = last_session_exercise.set_details.last(num_of_sets)
+                            last_set_details.fill({ 'reps' => 0, 'weight' => 0, 'note' => '' }, last_set_details.size...num_of_sets)
+                          else
+                            # If there is no previous session exercise, fill with default values
+                            Array.new(num_of_sets) { { 'reps' => 0, 'weight' => 0, 'note' => '' } }
+                          end
+
+      @workout_session.session_exercises.build(
+        routine_exercise: routine_exercise,
+        exercise_id: routine_exercise.exercise_id,
+        set_details: set_details_array
+      )
+    end
     if @workout_session.save
-      @routine.routine_exercises.each do |routine_exercise|
-        set_count = routine_exercise.sets || 0
-        initial_set_details = Array.new(set_count) do
-          {
-            reps: last_value_for_exercise(routine_exercise.exercise, :reps),
-            weight: last_value_for_exercise(routine_exercise.exercise, :weight),
-            note: last_value_for_exercise(routine_exercise.exercise, :note)
-          }
-        end
-        session_exercise = @workout_session.session_exercises.create(
-          routine_exercise: routine_exercise,
-          exercise: routine_exercise.exercise,
-          set_details: initial_set_details
-        )
-        if session_exercise.errors.any?
-          Rails.logger.debug session_exercise.errors.full_messages.to_sentence
-        end
-      end
       redirect_to workout_session_path(@workout_session), notice: 'WorkoutSession started successfully.'
     else
       Rails.logger.debug @workout_session.errors.full_messages.to_sentence

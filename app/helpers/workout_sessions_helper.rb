@@ -1,9 +1,6 @@
 module WorkoutSessionsHelper
-  def last_value_for_exercise(exercise, attribute)
-    last_session_exercise = SessionExercise.joins(:routine_exercise)
-                                           .where(routine_exercises: { exercise_id: exercise.id })
-                                           .order(created_at: :desc)
-                                           .first
-    last_session_exercise ? last_session_exercise[attribute] : 0
+  def last_values_for_exercise(exercise)
+    last_session_exercise = SessionExercise.where(exercise_id: exercise.id).order(created_at: :desc).first
+    last_session_exercise&.set_details&.last || { 'reps' => 0, 'weight' => 0, 'note' => '' }
   end
 end
