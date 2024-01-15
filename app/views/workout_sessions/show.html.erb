@@ -2,20 +2,13 @@
 <p>Started at: <%= @workout_session.start_time %></p>
 <p>End time: <%= @workout_session.end_time %></p>
 
-<%= form_with(model: @workout_session, url: workout_session_path(@workout_session), method: :patch) do |form| %>
-  <%= form.fields_for :session_exercises do |session_exercise_fields| %>
-    <% session_exercise_fields.object.set_details.each_with_index do |set_detail, index| %>
-      <div>
-        <%= session_exercise_fields.label :reps, "Reps for Set #{index + 1}" %>
-        <%= session_exercise_fields.number_field :reps, name: "workout_session[session_exercises_attributes][#{session_exercise_fields.index}][set_details][][reps]", value: set_detail[:reps] %>
-
-        <%= session_exercise_fields.label :weight, "Weight for Set #{index + 1}" %>
-        <%= session_exercise_fields.number_field :weight, name: "workout_session[session_exercises_attributes][#{session_exercise_fields.index}][set_details][][weight]", value: set_detail[:weight] %>
-
-        <%= session_exercise_fields.label :note, "Note for Set #{index + 1}" %>
-        <%= session_exercise_fields.text_field :note, name: "workout_session[session_exercises_attributes][#{session_exercise_fields.index}][set_details][][note]", value: set_detail[:note] %>
-      </div>
-    <% end %>
+<%= form_with(model: @workout_session, local: true) do |form| %>
+  <% if @workout_session.ended? %>
+    <!-- Render the partial for editing set details after the session has ended -->
+    <%= render 'ended_session_fields', form: form %>
+  <% else %>
+    <!-- Render the partial for editing set details during an active session -->
+    <%= render 'active_session_fields', form: form %>
   <% end %>
   <%= form.submit "Update WorkoutSession" %>
 <% end %>

@@ -65,7 +65,7 @@ class WorkoutSessionsController < ApplicationController
   end
 
   def update
-    Rails.logger.debug "Received params: #{params.inspect}"
+    Rails.logger.debug "Received raw params: #{params.inspect}"
     @workout_session = WorkoutSession.find(params[:id])
 
     session_exercises_attrs = params.dig(:workout_session, :session_exercises_attributes)
@@ -74,21 +74,22 @@ class WorkoutSessionsController < ApplicationController
       session_exercises_attrs&.each do |_key, attrs|
         session_exercise = @workout_session.session_exercises.find(attrs[:id])
 
-        # Ensure set_details is an array of hashes
-        if attrs[:set_details].is_a?(ActionController::Parameters)
-          set_details_array = attrs[:set_details].values.map(&:to_unsafe_h).map(&:to_h)
+        if attrs[:set_details].is_a?(Array)
+          # Assuming set_details is an array of hashes
+          set_details_array = attrs[:set_details].map(&:to_unsafe_h).map(&:to_h)
           session_exercise.set_details = set_details_array
         end
 
-        Rails.logger.debug "Processed set_details: #{set_details_array.inspect}"
+        # Debugging: Log the assigned set_details
+        Rails.logger.debug "Assigned set_details: #{session_exercise.set_details.inspect}"
 
-        # Save each session_exercise
         session_exercise.save!
       end
     end
-      redirect_to @workout_session, notice: 'WorkoutSession updated successfully.'
-    rescue ActiveRecord::RecordInvalid => e
-      render :edit, status: :unprocessable_entity
+
+    redirect_to @workout_session, notice: 'WorkoutSession updated successfully.'
+  rescue ActiveRecord::RecordInvalid => e
+    render :edit, status: :unprocessable_entity
   end
 
   private

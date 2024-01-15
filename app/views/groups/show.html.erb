@@ -1,8 +1,5 @@
-<h1>Group Details</h1>
-
-<p>Name: <%= @group.name %></p>
-<p>Description: <%= @group.description %></p>
-<p>Created At: <%= @group.created_at %></p>
+<h1 class="text-4xl mb-1"><%= @group.name %></h1>
+<h2 class="text-xl mb-2 text-gray-600 "><%= @group.description %></h2>
 
 <h2>Routines in this Group</h2>
 <% if @routines.any? %>
