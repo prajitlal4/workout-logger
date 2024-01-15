@@ -39,20 +39,14 @@ class WorkoutSessionsController < ApplicationController
     @group = @routine.group
     @workout_session = WorkoutSession.new(routine: @routine, start_time: Time.current, user: current_user, group: @group)
     @workout_session.routine.routine_exercises.each do |routine_exercise|
-      # Fetch the last session exercise for this routine exercise
-      last_session_exercise = SessionExercise.where(exercise_id: routine_exercise.exercise_id).order(created_at: :desc).first
+      # Use the helper method to get the last values or default values
+      last_values = last_values_for_exercise(routine_exercise.exercise, current_user)
 
       # Determine the number of sets for this routine exercise
       num_of_sets = routine_exercise.sets
 
-      set_details_array = if last_session_exercise && last_session_exercise.set_details.present?
-                            # Take the last 'num_of_sets' from the last session exercise, or fill in with default values
-                            last_set_details = last_session_exercise.set_details.last(num_of_sets)
-                            last_set_details.fill({ 'reps' => 0, 'weight' => 0, 'note' => '' }, last_set_details.size...num_of_sets)
-                          else
-                            # If there is no previous session exercise, fill with default values
-                            Array.new(num_of_sets) { { 'reps' => 0, 'weight' => 0, 'note' => '' } }
-                          end
+      # Initialize set_details with the last or default values
+      set_details_array = Array.new(num_of_sets) { last_values.deep_dup }
 
       @workout_session.session_exercises.build(
         routine_exercise: routine_exercise,
