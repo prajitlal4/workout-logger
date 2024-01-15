@@ -1,12 +1,7 @@
-<%= form_with(model: @routine, url: group_routines_path(@group), method: :post) do |form| %>
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-    <%= form.label :description %>
-    <%= form.text_field :description %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Create Group" %>
-  </div>
-<% end %>
+  <%= form_with(model: @routine, url: group_routines_path(@group), method: :post) do |f| %>
+    <%= f.label :name, "Routine Name", class: "block text-sm font-medium leading-6 text-gray-900"%>
+    <%= f.text_field :name, required: true, class: "block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+    <%= f.label :description, "Description", class: "block text-sm font-medium leading-6 text-gray-900"%>
+    <%= f.text_field :description, class: "block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+    <%= f.submit "Create Routine", class: "mt-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+  <% end %>
