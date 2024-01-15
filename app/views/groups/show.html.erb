@@ -1,35 +1,80 @@
-<h1 class="text-4xl mb-1"><%= @group.name %></h1>
-<h2 class="text-xl mb-2 text-gray-600 "><%= @group.description %></h2>
+<div class="flex flex-col mb-4 md:mb-2 justify-between md:flex-row">
+  <div>
+    <h1 class="text-4xl mb-1"><%= @group.name %></h1>
+    <h2 class="text-xl mb-2 text-gray-600 "><%= @group.description %></h2>
+  </div>
+</div>
 
-<h2>Routines in this Group</h2>
+<%= link_to 'Back to Groups', groups_path, class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+
+
+<div class="mt-8 mb-6 md:mb-10">
+  <h2 class="text-xl mb-2 ">Invite a friend</h2>
+  <%= form_with url: group_invite_to_group_path(@group), method: :post do |f| %>
+    <%= f.label :email, "Email", class: "block text-sm font-medium leading-6 text-gray-900"%>
+    <%= f.email_field :email, required: true, class: "block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6", placeholder: "you@example.com" %>
+    <%= f.hidden_field :group_id, value: @group.id %>
+    <%= f.submit "Invite User", class: "mt-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+  <% end %>
+</div>
+
+<div class="flex flex-col mb-6 md:mb-2 justify-between md:flex-row">
+  <h2 class="text-xl mb-2 ">Routines</h2>
+  <div>
+    <%= link_to "Add Routine", new_group_routine_path(@group), class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+  </div>
+</div>
 <% if @routines.any? %>
-  <ul>
+  <ul role="list" class="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
     <% @routines.each do |routine| %>
-      <li><%= link_to routine.name, group_routine_path(@group, routine) %> - <%= routine.description %></li>
+      <%= link_to group_routine_path(@group, routine) do %>
+        <li class="relative flex justify-between items-center gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
+          <div class="flex min-w-0 gap-x-4">
+            <div class="min-w-0 flex-auto">
+              <p class="text-sm font-semibold text-gray-900">
+                <%= routine.name %> <br/>
+              </p>
+              <p class="text-sm font-light text-gray-400 ">
+                <%= routine.description %>
+              </p>
+            </div>
+          </div>
+          <svg class="h-5 w-5 text-gray-400 flex" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" >
+            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+          </svg>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 <% else %>
-  <p>No routines found in this group.</p>
+  <p class="text-gray-600">There are no routines in this group.</p>
 <% end %>
-<%= link_to "Add Routine", new_group_routine_path(@group) %>
 
-<h2>Sessions logged</h2>
+<div class="flex flex-col mt-6 md:mt-10 mb-6 md:mb-2 justify-between md:flex-row">
+  <h2 class="text-xl mb-2 ">Sessions</h2>
+</div>
 <% if @workout_sessions.any? %>
-  <ul>
+  <ul role="list" class="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
     <% @workout_sessions.each do |workout_session| %>
-      <li><%= workout_session.user.email %> - <%= link_to workout_session.routine.name, workout_session_path(workout_session) %> - <%= workout_session.start_time %></li>
+      <%= link_to workout_session_path(workout_session) do %>
+        <li class="relative flex justify-between items-center gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
+          <div class="flex min-w-0 gap-x-4">
+            <div class="min-w-0 flex-auto">
+              <p class="text-sm font-semibold text-gray-900">
+                <%= workout_session.user.name %> <br/>
+              </p>
+              <p class="text-sm font-light text-gray-400 ">
+                <%= workout_session.routine.name %>
+              </p>
+            </div>
+          </div>
+          <svg class="h-5 w-5 text-gray-400 flex" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" >
+            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+          </svg>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 <% else %>
-  <p>No workout_sessions found in this group.</p>
+  <p class="text-gray-600">No sessions recorded for this group</p>
 <% end %>
-
-<h2>Invite User to Group</h2>
-<%= form_with url: group_invite_to_group_path(@group), method: :post do |f| %>
-  <%= f.label :email, "User Email" %>
-  <%= f.email_field :email, required: true %>
-  <%= f.hidden_field :group_id, value: @group.id %>
-  <%= f.submit "Send Invitation", class: 'btn btn-success' %>
-<% end %>
-
-<%= link_to 'Back to Groups', groups_path %>
