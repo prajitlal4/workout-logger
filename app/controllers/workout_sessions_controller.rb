@@ -39,19 +39,16 @@ class WorkoutSessionsController < ApplicationController
     @group = @routine.group
     @workout_session = WorkoutSession.new(routine: @routine, start_time: Time.current, user: current_user, group: @group)
     @workout_session.routine.routine_exercises.each do |routine_exercise|
-      # Use the helper method to get the last values or default values
-      last_values = last_values_for_exercise(routine_exercise.exercise, current_user)
-
-      # Determine the number of sets for this routine exercise
+      # Get the number of sets for this routine exercise
       num_of_sets = routine_exercise.sets
 
-      # Initialize set_details with the last or default values
-      set_details_array = Array.new(num_of_sets) { last_values.deep_dup }
+      # Get the last or default set details for the correct number of sets
+      set_details = last_values_for_exercise(routine_exercise.exercise, current_user, num_of_sets)
 
       @workout_session.session_exercises.build(
         routine_exercise: routine_exercise,
         exercise_id: routine_exercise.exercise_id,
-        set_details: set_details_array
+        set_details: set_details
       )
     end
     if @workout_session.save
