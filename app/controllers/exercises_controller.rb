@@ -9,7 +9,7 @@ class ExercisesController < ApplicationController
     @routine = Routine.find(params[:routine_id])
     @group = Group.find(params[:group_id])
     @exercise = Exercise.new
-    @categories = Category.all
+    @categories = Category.where(group_id: @group.id)
     @exercise_types = ExerciseType.all
   end
 

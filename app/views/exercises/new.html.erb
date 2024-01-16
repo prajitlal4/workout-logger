@@ -1,33 +1,20 @@
-<h1>Create your own exercise</h1>
-
-<%= form_with model: @exercise, url: group_routine_exercises_path(@group, @routine), data: { turbo_method: :post } do |form| %>
-  <% if @exercise.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@exercise.errors.count, "error") %> prohibited this exercise from being saved:</h2>
-      <ul>
-        <% @exercise.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+<div class="flex flex-col mb-8 md:mb-10 justify-between md:flex-row">
+  <div>
+    <h1 class="text-4xl mb-1">Create your own Exercise</h1>
   </div>
+  <%= link_to 'Back to Exercises', group_routine_exercises_path(@routine.group, @routine), class: "self-start md:self-center rounded-md bg-white px-3 py-2 mt-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+</div>
 
-  <div class="field">
-    <%= form.label :category_id %>
-    <%= form.collection_select :category_id, @categories, :id, :name, include_blank: true %>
-  </div>
+<%= form_with model: @exercise, url: group_routine_exercises_path(@routine.group, @routine), data: { turbo_method: :post } do |form| %>
+  <%= form.label :name, class: "block text-sm font-medium leading-6 text-gray-900" %>
+  <%= form.text_field :name, required: true, class: "block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
 
-  <div class="field">
-    <%= form.label :exercise_type_id %>
-    <%= form.collection_select :exercise_type_id, @exercise_types, :id, :name, include_blank: true %>
-  </div>
+  <%= form.label :category_id, class: "block text-sm font-medium leading-6 text-gray-900" %>
+  <%= form.collection_select :category_id, @categories, :id, :name, include_blank: true, required: true, class: "mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+  <%= link_to 'New Category', new_group_routine_category_path(@routine.group, @routine), class: "self-start md:self-center rounded-md bg-white px-3 py-2 mt-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <%= form.label :exercise_type_id, class: "block text-sm font-medium leading-6 text-gray-900" %>
+  <%= form.collection_select :exercise_type_id, @exercise_types, :id, :name, include_blank: true, required: true, class: "mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+
+  <%= form.submit "Create Exercise", class: "block mt-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
 <% end %>

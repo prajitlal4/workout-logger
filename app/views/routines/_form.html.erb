@@ -1,4 +1,4 @@
-  <%= form_with(model: @routine, url: group_routines_path(@group), method: :post) do |f| %>
+  <%= form_with model: @routine, url: group_routines_path(@group), data: { turbo_method: :post } do |f| %>
     <%= f.label :name, "Routine Name", class: "block text-sm font-medium leading-6 text-gray-900"%>
     <%= f.text_field :name, required: true, class: "block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
     <%= f.label :description, "Description", class: "block text-sm font-medium leading-6 text-gray-900"%>

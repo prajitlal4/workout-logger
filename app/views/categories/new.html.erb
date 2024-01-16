@@ -1,0 +1,12 @@
+<div class="flex flex-col mb-8 md:mb-10 justify-between md:flex-row">
+  <div>
+    <h1 class="text-4xl mb-1">Add new Category</h1>
+  </div>
+  <%= link_to 'Back to Exercises', new_group_routine_exercise_path(group_id: @group, routine_id: @routine), class: "self-start md:self-center rounded-md bg-white px-3 py-2 mt-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+</div>
+
+<%= form_with model: @category, url: group_routine_categories_path(@group), data: { turbo_method: :post } do |f| %>
+  <%= f.label :name, "Category Name", class: "block text-sm font-medium leading-6 text-gray-900" %>
+  <%= f.text_field :name, required: true, class: "block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+  <%= f.submit "Create Category", class: "block mt-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+<% end %>

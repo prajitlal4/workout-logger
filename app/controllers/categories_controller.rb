@@ -10,6 +10,8 @@ class CategoriesController < ApplicationController
 
   def new
     @category = Category.new
+    @routine = Routine.find(params[:routine_id])
+    @group = Group.find(params[:group_id])
   end
 
   def edit
@@ -17,10 +19,12 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(category_params)
-    @category.group = current_group
+    @group = Group.find(params[:group_id])
+    @routine = Routine.find(params[:routine_id])
+    @category.group = @group
 
     if @category.save
-      redirect_to @category, notice: 'Category was successfully created.'
+      redirect_to group_routine_exercises_path(group_id: @category.group), notice: 'Category was successfully created.'
     else
       render :new
     end

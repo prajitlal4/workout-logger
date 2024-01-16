@@ -8,13 +8,13 @@ Rails.application.routes.draw do
   resources :groups do
     post 'invite', to: 'groups#invite_to_group', as: :invite_to_group
     resources :routines do
+      resources :categories
       post 'add_exercise/:exercise_id', to: 'routines#add_exercise', as: 'add_exercise'
       resources :exercises
       resources :routine_exercises, only: [:update, :destroy]
       patch 'update_exercises', on: :member
     end
   end
-  resources :categories
   resources :workout_sessions, only: [:create, :show, :update] do
     patch :update_exercises, on: :member
     resources :session_exercises
