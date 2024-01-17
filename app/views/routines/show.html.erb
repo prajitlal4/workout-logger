@@ -3,7 +3,10 @@
     <h1 class="text-4xl mb-1"><%= @routine.name %></h1>
     <h2 class="text-xl mb-2 text-gray-600 "><%= @routine.description %></h2>
   </div>
-  <%= link_to 'Back to Routines', group_path(@routine.group), class: "self-start md:self-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+  <div>
+    <%= link_to 'Delete Routine', group_routine_path(@routine.group, @routine), data: { turbo_method: :delete }, class: "self-start md:self-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-100 bg-red-200"%>
+    <%= link_to 'Back to Routines', group_path(@routine.group), class: "self-start md:self-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+  </div>
 </div>
 
 <%= form_with(model: @routine, url: update_exercises_group_routine_path(@routine.group, @routine), method: :patch, local: true) do |form| %>

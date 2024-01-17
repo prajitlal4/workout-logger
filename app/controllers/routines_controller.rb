@@ -37,8 +37,11 @@ class RoutinesController < ApplicationController
   end
 
   def destroy
-    @routine.destroy
-    redirect_to routines_url, notice: 'Routine was successfully destroyed.'
+    @routine = Routine.find(params[:id])
+    @group = Group.find(params[:group_id])
+    if @routine.destroy
+      redirect_to group_path(@group), notice: 'Routine was successfully destroyed.'
+    end
   end
 
   # CUSTOM CONTROLLER ACTIONS
