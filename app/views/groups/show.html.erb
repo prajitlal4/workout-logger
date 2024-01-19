@@ -64,7 +64,8 @@
                 <%= workout_session.user.name %> <br/>
               </p>
               <p class="text-sm font-light text-gray-400 ">
-                <%= workout_session.routine.name %>
+                <% Time.zone = 'Perth' %>
+                <%= workout_session.routine.name %> - <%= workout_session.created_at.in_time_zone.strftime('%d/%m/%Y') %>
               </p>
             </div>
           </div>

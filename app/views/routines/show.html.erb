@@ -26,7 +26,7 @@
         <%= form.fields_for 'routine_exercises[]', routine_exercise do |re_form| %>
           <%= re_form.hidden_field :id %>
           <div class="flex-grow">
-            <%= re_form.number_field :sets, class: "w-full sm:w-auto rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" %>
+            Sets <%= re_form.number_field :sets, class: "w-full sm:w-auto rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" %>
           </div>
           <%= link_to 'Remove', group_routine_routine_exercise_path(@routine.group, @routine, routine_exercise), method: :delete, data: { turbo_method: :delete, confirm: 'Are you sure?' }, class: "text-red-600 hover:text-red-700" %>
         <% end %>
@@ -34,6 +34,6 @@
     <% end %>
   </div>
   <div class="mt-4">
-    <%= form.submit "Update All Exercises", class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 self-start md:self-center" %>
+    <%= form.submit "Update Sets", class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 self-start md:self-center" %>
   </div>
 <% end %>
