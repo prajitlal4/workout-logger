@@ -72,7 +72,6 @@ class WorkoutSessionsController < ApplicationController
   end
 
   def update
-    Rails.logger.debug "Received raw params: #{params.inspect}"
     @workout_session = WorkoutSession.find(params[:id])
 
     session_exercises_attrs = params.dig(:workout_session, :session_exercises_attributes)
@@ -86,9 +85,6 @@ class WorkoutSessionsController < ApplicationController
           set_details_array = attrs[:set_details].map(&:to_unsafe_h).map(&:to_h)
           session_exercise.set_details = set_details_array
         end
-
-        # Debugging: Log the assigned set_details
-        Rails.logger.debug "Assigned set_details: #{session_exercise.set_details.inspect}"
 
         session_exercise.save!
       end

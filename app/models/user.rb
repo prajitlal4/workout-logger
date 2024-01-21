@@ -10,15 +10,15 @@ class User < ApplicationRecord
   has_many :workout_sessions
 
   def self.invite!(attributes = {}, invited_by = nil)
-    super(attributes.except(:group_id), invited_by) do |invitable|
-      if attributes[:group_id]
-        InvitationGroupAssociation.create!(
-          email: attributes[:email],
-          group_id: attributes[:group_id],
-          invitation_token: invitable.raw_invitation_token
-        )
+    invited_user = super(attributes.except(:group_id), invited_by)
+    if invited_user.persisted? && attributes[:group_id]
+      InvitationGroupAssociation.create!(
+        email: invited_user.email,
+        group_id: attributes[:group_id],
+        invitation_token: invited_user.raw_invitation_token
+      )
     end
-  end
-end
 
+    invited_user
+  end
 end

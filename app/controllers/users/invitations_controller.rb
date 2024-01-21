@@ -1,13 +1,13 @@
 class Users::InvitationsController < Devise::InvitationsController
   before_action :configure_permitted_parameters
   def update
+    raw_token = params[:user][:invitation_token]
+    association = InvitationGroupAssociation.find_by(invitation_token: raw_token)
+
     super do |resource|
-      if resource.errors.empty?
-        association = InvitationGroupAssociation.find_by(invitation_token: resource.invitation_token)
-        if association
-          association.group.group_members.create(user: resource) unless association.group.group_members.exists?(user: resource)
-          association.destroy
-        end
+      if resource.errors.empty? && association
+        association.group.group_members.create(user: resource) unless association.group.group_members.exists?(user: resource)
+        association.destroy
       end
     end
   end
@@ -24,10 +24,10 @@ class Users::InvitationsController < Devise::InvitationsController
     super
   end
 
-  protected
+  private
 
-  # Permit the new params here.
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:invite, keys: [:name])
+  def resource_params
+    params.require(:user).permit(:name, :password, :password_confirmation, :invitation_token)
   end
+
 end
