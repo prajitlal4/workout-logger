@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { invitations: 'users/invitations' }
+  devise_for :users, controllers: { invitations: 'users/invitations', registrations: 'custom_devise_controllers/registrations' }
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
