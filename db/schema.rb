@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_25_110027) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_25_110610) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -37,6 +37,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_25_110027) do
     t.index ["category_id"], name: "index_exercises_on_category_id"
     t.index ["exercise_type_id"], name: "index_exercises_on_exercise_type_id"
     t.index ["user_id"], name: "index_exercises_on_user_id"
+  end
+
+  create_table "group_exercises", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "exercise_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_group_exercises_on_exercise_id"
+    t.index ["group_id"], name: "index_group_exercises_on_group_id"
   end
 
   create_table "group_members", force: :cascade do |t|
@@ -185,6 +194,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_25_110027) do
   add_foreign_key "exercises", "categories"
   add_foreign_key "exercises", "exercise_types"
   add_foreign_key "exercises", "users"
+  add_foreign_key "group_exercises", "exercises"
+  add_foreign_key "group_exercises", "groups"
   add_foreign_key "group_members", "groups"
   add_foreign_key "group_members", "users"
   add_foreign_key "groups", "users", column: "created_by_user_id"
