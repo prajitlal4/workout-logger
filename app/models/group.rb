@@ -8,4 +8,7 @@ class Group < ApplicationRecord
 
   has_many :invitation_group_associations
 
+  has_many :group_exercises
+  has_many :exercises, through: :group_exercises
+
 end
