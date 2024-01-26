@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :routines
   has_many :workout_sessions
   has_many :exercises
+  has_many :categories
 
   def self.invite!(attributes = {}, invited_by = nil)
     invited_user = super(attributes.except(:group_id), invited_by)

@@ -2,7 +2,7 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
 
   def index
-    @categories = Category.where(group: [current_group, nil])
+    @categories = Category.where(user: [current_user, nil])
   end
 
   def show
@@ -11,20 +11,20 @@ class CategoriesController < ApplicationController
   def new
     @category = Category.new
     @routine = Routine.find(params[:routine_id])
-    @group = Group.find(params[:group_id])
+    @user = current_user
   end
 
   def edit
   end
 
   def create
-    @category = Category.new(category_params)
     @group = Group.find(params[:group_id])
     @routine = Routine.find(params[:routine_id])
-    @category.group = @group
+
+    @category = current_user.categories.build(category_params)
 
     if @category.save
-      redirect_to group_routine_exercises_path(group_id: @category.group), notice: 'Category was successfully created.'
+      redirect_to group_routine_exercises_path(group_id: @group), notice: 'Category was successfully created.'
     else
       render :new
     end
@@ -50,10 +50,6 @@ class CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:name, :description, :group_id)
-  end
-
-  def current_group
-    @current_group ||= Group.find(params[:group_id])
+    params.require(:category).permit(:name, :description)
   end
 end
