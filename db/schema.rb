@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_25_110610) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_26_014140) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "group_id"
-    t.index ["group_id"], name: "index_categories_on_group_id"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
   create_table "exercise_types", force: :cascade do |t|
@@ -190,7 +190,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_25_110610) do
     t.index ["user_id"], name: "index_workout_sessions_on_user_id"
   end
 
-  add_foreign_key "categories", "groups"
+  add_foreign_key "categories", "users"
   add_foreign_key "exercises", "categories"
   add_foreign_key "exercises", "exercise_types"
   add_foreign_key "exercises", "users"
