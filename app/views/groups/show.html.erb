@@ -61,8 +61,17 @@
           <div class="flex min-w-0 gap-x-4">
             <div class="min-w-0 flex-auto">
               <p class="text-sm font-semibold text-gray-900">
-                <%= workout_session.user.name %> <br/>
+                <%= workout_session.user.name %>
               </p>
+              <% if workout_session.ended?%>
+                <p class="text-sm font-semibold text-green-500">
+                  Finished
+                </p>
+              <% else %>
+                <p class="text-sm font-semibold text-gray-500">
+                  In progress
+                </p>
+              <% end %>
               <p class="text-sm font-light text-gray-400 ">
                 <% Time.zone = 'Perth' %>
                 <%= workout_session.routine.name %> - <%= workout_session.start_time.in_time_zone.strftime('%d/%m/%Y') %>

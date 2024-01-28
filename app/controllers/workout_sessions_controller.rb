@@ -49,7 +49,7 @@ class WorkoutSessionsController < ApplicationController
 
     end
     if @workout_session.save
-      redirect_to workout_session_path(@workout_session), notice: 'WorkoutSession started successfully.'
+      redirect_to workout_session_path(@workout_session), notice: 'Session started successfully.'
     else
       redirect_to group_routine_path(@routine.group_id, @routine), alert: 'Error starting workout_session.'
     end
@@ -57,7 +57,7 @@ class WorkoutSessionsController < ApplicationController
 
   def destroy
     @workout_session.destroy
-    redirect_to workout_sessions_url, notice: 'WorkoutSession was successfully destroyed.'
+    redirect_to workout_sessions_url, notice: 'Session was successfully destroyed.'
   end
 
   # CUSTOM CONTROLLER ACTIONS
@@ -65,7 +65,7 @@ class WorkoutSessionsController < ApplicationController
   def end_session
     @workout_session = WorkoutSession.find(params[:id])
     if @workout_session.update(end_time: Time.current)
-      redirect_to workout_session_path(@workout_session), notice: 'WorkoutSession ended.'
+      redirect_to workout_session_path(@workout_session), notice: 'Session ended.'
     else
       redirect_to workout_session_path(@workout_session), alert: 'Could not end the workout_session. Please try again.'
     end
@@ -90,7 +90,7 @@ class WorkoutSessionsController < ApplicationController
       end
     end
 
-    redirect_to @workout_session, notice: 'WorkoutSession updated successfully.'
+    redirect_to @workout_session, notice: 'Session updated successfully.'
   rescue ActiveRecord::RecordInvalid => e
     render :edit, status: :unprocessable_entity
   end

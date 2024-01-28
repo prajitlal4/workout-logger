@@ -17,7 +17,7 @@ class SessionExercisesController < ApplicationController
 
   def update
     if @session_exercise.update(session_exercise_params)
-      redirect_to @session_exercise, notice: 'WorkoutSession exercise was successfully updated.'
+      redirect_to @session_exercise, notice: 'Session exercise was successfully updated.'
     else
       render :edit
     end
@@ -25,7 +25,7 @@ class SessionExercisesController < ApplicationController
 
   def destroy
     @session_exercise.destroy
-    redirect_to session_exercises_url, notice: 'WorkoutSession exercise was successfully destroyed.'
+    redirect_to session_exercises_url, notice: 'Session exercise was successfully destroyed.'
   end
 
   private
